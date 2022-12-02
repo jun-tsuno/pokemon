@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AvatarImage from "./components/AvatarImage";
 import ModalPage from "./pages/ModalPage";
 import { useFetchPokemonQuery } from "./store/store";
+import PokeSearch from "./pages/PokeSearch";
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
@@ -43,9 +44,12 @@ function App() {
 
 	return (
 		<>
-			<h1 className="text-5xl font-tech p-5 text-center text-white bg-red-500 sticky top-0 w-full">
-				Pokedex
-			</h1>
+			<div className="sticky top-0 w-full font-tech  bg-red-500">
+				<h1 className="text-5xl text-center text-white pt-5">Pokedex</h1>
+				<div className="flex justify-end pb-5 pr-20">
+					<PokeSearch />
+				</div>
+			</div>
 			<div className="flex flex-wrap justify-center font-tech">
 				{showContent}
 				{showModal && modal}
