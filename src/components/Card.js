@@ -12,7 +12,7 @@ function PokemonCard({ pokemon, pokemonId }) {
 					component="img"
 					alt="green iguana"
 					height="140"
-					image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/${pokemonId}.png`}
+					image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/spriteLs/pokemon/versions/generation-iii/emerald/${pokemonId}.png`}
 				/>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="div">

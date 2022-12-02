@@ -10,7 +10,15 @@ const pokemonApi = createApi({
 			fetchPokemon: builder.query({
 				query: () => {
 					return {
-						url: "/pokemon?limit=100",
+						url: "/pokemon?limit=151",
+						method: "GET",
+					};
+				},
+			}),
+			fetchPokemonInfo: builder.query({
+				query: (pokemonId) => {
+					return {
+						url: `/pokemon-species/${pokemonId}`,
 						method: "GET",
 					};
 				},
@@ -19,5 +27,5 @@ const pokemonApi = createApi({
 	},
 });
 
-export const { useFetchPokemonQuery } = pokemonApi;
+export const { useFetchPokemonQuery, useFetchPokemonInfoQuery } = pokemonApi;
 export { pokemonApi };

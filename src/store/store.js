@@ -13,4 +13,7 @@ export const store = configureStore({
 
 setupListeners(store.dispatch);
 
-export { useFetchPokemonQuery } from "./apis/pokemonApi";
+export {
+	useFetchPokemonQuery,
+	useFetchPokemonInfoQuery,
+} from "./apis/pokemonApi";

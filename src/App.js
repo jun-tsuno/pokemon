@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import AvatarImage from "./components/AvatarImage";
-import Modal from "./components/Modal";
+import ModalPage from "./pages/ModalPage";
 import { useFetchPokemonQuery } from "./store/store";
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
-	const [modalName, setModalName] = useState("");
+	const [modalPokemonId, setModalPokemonId] = useState(null);
 	const { data, isError, isFetching } = useFetchPokemonQuery();
 
 	const handleClick = (pokemonId) => {
 		setShowModal(true);
-		setModalName(data.results[pokemonId - 1].name);
+		setModalPokemonId(pokemonId);
 	};
 
 	const handleClose = () => {
 		setShowModal(false);
 	};
 
-	const modal = <Modal onClose={handleClose}>{modalName}</Modal>;
+	const modal = (
+		<ModalPage onClose={handleClose} modalPokemonId={modalPokemonId} />
+	);
 
 	let showContent;
 	if (isFetching) {
@@ -40,10 +42,15 @@ function App() {
 	}
 
 	return (
-		<div className="flex flex-wrap justify-center">
-			{showContent}
-			{showModal && modal}
-		</div>
+		<>
+			<h1 className="text-5xl font-tech p-5 text-center text-white bg-red-500 sticky top-0 w-full">
+				Pokedex
+			</h1>
+			<div className="flex flex-wrap justify-center font-tech">
+				{showContent}
+				{showModal && modal}
+			</div>
+		</>
 	);
 }
 
