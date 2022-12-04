@@ -1,6 +1,8 @@
 import React from "react";
 import Modal from "../components/Modal";
 import { useFetchPokemonInfoQuery } from "../store/store";
+import Spinner from "../components/Spinner";
+import TypeWriterEffect from "react-typewriter-effect";
 
 function ModalPage({ onClose, modalPokemonId }) {
 	const { data, isError, isFetching } =
@@ -8,9 +10,9 @@ function ModalPage({ onClose, modalPokemonId }) {
 
 	let showContent;
 	if (isFetching) {
-		showContent = <div>Loading</div>;
+		showContent = <Spinner className="pl-64" />;
 	} else if (isError) {
-		showContent = <div>Can't show the contents</div>;
+		showContent = "Error Fetching Data...";
 	} else {
 		const name = data.names[8].name;
 		const { flavor_text_entries, habitat } = data;
@@ -23,27 +25,25 @@ function ModalPage({ onClose, modalPokemonId }) {
 			/>
 		);
 		showContent = (
-			<Modal onClose={onClose}>
-				<div className="flex justify-around">
-					<div className="w-1/4 my-auto">{image}</div>
-					<div className="w-2/4">
-						<div className="text-3xl mb-2">{name}</div>
-						<div className="mb-3 text-lg">
-							<strong>HABITAT:</strong>
-							<br />
-							{habitat.name}
-						</div>
-						<div className="text-lg">
-							<strong>DESCRIPTION:</strong>
-							<br />
-							{text}
-						</div>
+			<div className="flex">
+				<div className="w-36 my-auto mx-10">{image}</div>
+				<div className="w-80 ml-18">
+					<div className="text-3xl mb-2">{name}</div>
+					<div className="mb-3 text-lg">
+						<strong>HABITAT:</strong>
+						<br />
+						{habitat.name}
+					</div>
+					<div className="text-lg">
+						<strong>DESCRIPTION:</strong>
+						<br />
+						<TypeWriterEffect text={text} startDelay={100} typeSpeed={50} />
 					</div>
 				</div>
-			</Modal>
+			</div>
 		);
 	}
-	return showContent;
+	return <Modal onClose={onClose}>{showContent}</Modal>;
 }
 
 export default ModalPage;

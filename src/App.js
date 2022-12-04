@@ -3,11 +3,16 @@ import AvatarImage from "./components/AvatarImage";
 import ModalPage from "./pages/ModalPage";
 import { useFetchPokemonQuery } from "./store/store";
 import PokeSearch from "./pages/PokeSearch";
+import { useSelector } from "react-redux";
+import Spinner from "./components/Spinner";
 
 function App() {
 	const [showModal, setShowModal] = useState(false);
 	const [modalPokemonId, setModalPokemonId] = useState(null);
 	const { data, isError, isFetching } = useFetchPokemonQuery();
+	const searchTerm = useSelector((state) => {
+		return state.pokemon.searchTerm;
+	});
 
 	const handleClick = (pokemonId) => {
 		setShowModal(true);
@@ -24,12 +29,16 @@ function App() {
 
 	let showContent;
 	if (isFetching) {
-		showContent = <div>Loading</div>;
+		showContent = <Spinner className="mt-40" />;
 	} else if (isError) {
-		showContent = <div>Can't show the contents</div>;
+		showContent = <div>Error Fetching Data...</div>;
 	} else {
-		showContent = data.results.map((item, index) => {
-			const pokemonId = index + 1;
+		const filteredData = data.results.filter((item) =>
+			item.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+		);
+
+		showContent = filteredData.map((item) => {
+			const pokemonId = parseInt(item.url.split("/").slice(-2, -1));
 
 			return (
 				<AvatarImage
@@ -45,7 +54,7 @@ function App() {
 	return (
 		<>
 			<div className="sticky top-0 w-full font-tech  bg-red-500">
-				<h1 className="text-5xl text-center text-white pt-5">Pokedex</h1>
+				<h1 className="text-5xl text-center text-white pt-5">Pokedex.mini</h1>
 				<div className="flex justify-end pb-5 pr-20">
 					<PokeSearch />
 				</div>
