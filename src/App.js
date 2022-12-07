@@ -1,68 +1,37 @@
-import React, { useState } from "react";
-import AvatarImage from "./components/AvatarImage";
-import ModalPage from "./pages/ModalPage";
-import { useFetchPokemonQuery } from "./store/store";
-import PokeSearch from "./pages/PokeSearch";
-import { useSelector } from "react-redux";
-import Spinner from "./components/Spinner";
+import ShowPage from "./pages/ShowPage";
+import generations from "./data/generations";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SharedLayout from "./pages/SharedLayout";
 
 function App() {
-	const [showModal, setShowModal] = useState(false);
-	const [modalPokemonId, setModalPokemonId] = useState(null);
-	const { data, isError, isFetching } = useFetchPokemonQuery();
-	const searchTerm = useSelector((state) => {
-		return state.pokemon.searchTerm;
-	});
-
-	const handleClick = (pokemonId) => {
-		setShowModal(true);
-		setModalPokemonId(pokemonId);
-	};
-
-	const handleClose = () => {
-		setShowModal(false);
-	};
-
-	const modal = (
-		<ModalPage onClose={handleClose} modalPokemonId={modalPokemonId} />
-	);
-
-	let showContent;
-	if (isFetching) {
-		showContent = <Spinner className="mt-40" />;
-	} else if (isError) {
-		showContent = <div>Error Fetching Data...</div>;
-	} else {
-		const filteredData = data.results.filter((item) =>
-			item.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-		);
-
-		showContent = filteredData.map((item) => {
-			const pokemonId = parseInt(item.url.split("/").slice(-2, -1));
-
-			return (
-				<AvatarImage
-					onClick={() => handleClick(pokemonId)}
-					key={item.name}
-					pokemon={item}
-					pokemonId={pokemonId}
-				/>
-			);
-		});
-	}
-
+	const newGenArr = [...generations];
 	return (
 		<>
-			<div className="sticky top-0 w-full font-tech  bg-red-500">
-				<h1 className="text-5xl text-center text-white pt-5">Pokedex.mini</h1>
-				<div className="flex justify-end pb-5 pr-20">
-					<PokeSearch />
-				</div>
-			</div>
-			<div className="flex flex-wrap justify-center font-tech">
-				{showContent}
-				{showModal && modal}
-			</div>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<SharedLayout />}>
+						<Route
+							index
+							element={
+								<ShowPage
+									limit={generations[0].limit}
+									offset={generations[0].offset}
+								/>
+							}
+						/>
+						{newGenArr.splice(1).map(({ id, limit, offset, link }) => {
+							console.log(link);
+							return (
+								<Route
+									key={id}
+									path={link}
+									element={<ShowPage limit={limit} offset={offset} />}
+								/>
+							);
+						})}
+					</Route>
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }
