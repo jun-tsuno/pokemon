@@ -15,7 +15,7 @@ function PokeSearch() {
 	return (
 		<>
 			<input
-				className="w-1/4 leading-10 pl-3"
+				className="mx-auto sm:mx-0 w-[270px] leading-10 pl-3"
 				placeholder="Search Pokemon..."
 				value={searchTerm}
 				onChange={handleChangeTerm}
